@@ -10,8 +10,10 @@ import { map } from 'rxjs/operators';
 @Injectable()
 export class GlobalResponseInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+    const statusCode = context.switchToHttp().getResponse().statusCode;
     return next.handle().pipe(
       map((data) => ({
+        statusCode,
         success: true,
         data,
       })),
